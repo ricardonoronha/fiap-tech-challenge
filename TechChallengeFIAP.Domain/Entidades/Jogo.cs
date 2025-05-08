@@ -1,6 +1,6 @@
 ﻿namespace TechChallengeFIAP.Domain.Entidades;
 
-public class Jogos
+public class Jogo
 {
     string NomeJogo { get; set; }
     string DescricaoJogo { get; set; }
