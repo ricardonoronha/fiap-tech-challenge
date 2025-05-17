@@ -11,10 +11,9 @@ namespace TechChallengeFIAP.Data.Repositorios.Mapeamentos
         {
            builder.ToTable("Promocao");
            builder.HasKey(p => p.Id);
-           builder.Property(p => p.Id).HasColumnType("INT");
            builder.Property(p => p.DataInicio).HasColumnType("DATETIME");
            builder.Property(p => p.DataFim).HasColumnType("DATETIME");
-           builder.Property(p => p.JogoId).HasColumnType("INT");
+           builder.Property(p => p.JogoId);
            builder.Property(p => p.EhCancelada).HasColumnType("BIT");
         }
     }

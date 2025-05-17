@@ -11,7 +11,10 @@ namespace TechChallengeFIAP.Domain.Entidades
         public Guid Id { get; set; }
         public DateTime DataInicio { get; set; }
         public DateTime DataFim { get; set; }
-        public int JogoId { get; set; }
+        public Guid JogoId { get; set; }
+        public Jogo Jogo { get; set; } = null!;
         public bool EhCancelada { get; set; }
+
+        
     }
 }
