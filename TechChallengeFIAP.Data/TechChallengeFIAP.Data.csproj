@@ -15,8 +15,4 @@
     <ProjectReference Include="..\TechChallengeFIAP.Domain\TechChallengeFIAP.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Mapeamentos\" />
-  </ItemGroup>
-
 </Project>
