@@ -2,11 +2,12 @@
 
 public class Jogo
 {
-    string NomeJogo { get; set; }
-    string DescricaoJogo { get; set; }
-    string ClassificacaoJogo { get; set; }
-    decimal ValorJogo { get; set; }
-    decimal ValorPromocao { get; set; }
-    DateTime DataLancamento { get; set; }
-    bool PromocaoHabilitada { get; set; }
+    public Guid Id { get; set; }
+    public string NomeJogo { get; set; }
+    public string DescricaoJogo { get; set; }
+    public string ClassificacaoJogo { get; set; }
+    public DateTime DataLancamento { get; set; }
+    public decimal ValorBase { get; set; }
+    public decimal ValorPromocao { get; set; }
+    public bool EhInativo { get; set; }
 }
