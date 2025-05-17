@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TechChallengeFIAP.Data.Mapeamentos;
 using TechChallengeFIAP.Domain.Entidades;
 
 namespace TechChallengeFIAP.Data.Repositorios
@@ -8,20 +7,26 @@ namespace TechChallengeFIAP.Data.Repositorios
     {
         
         private readonly string _connectionString;
-        // Construtor da classe ApplicationDbContext
-        public ApplicationDbContext(string conectionString)
-        {
-            _connectionString = conectionString;
+        
+        // Construtor da classe ApplicationDbContext vazio para que não ocorra erro ao executar as Migrations
+        public ApplicationDbContext()
+        {     
         }
 
-        public DbSet<Jogo> Jogo{ get; set; }
+        // Construtor da classe ApplicationDbContext
+        public ApplicationDbContext(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
+        public DbSet<Jogo> Jogo { get; set; }
         public DbSet<Pessoa> Pessoa { get; set; }
         public DbSet<Promocao> Promocao { get; set; }
 
         //definição configurações do banco de dados
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Verificação se as opções do contexto já foram configuradas em outro lugar
+            // Verificação se as opções do context já foram configuradas em outro lugar
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(_connectionString);

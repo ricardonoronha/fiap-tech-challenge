@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Reflection.Emit;
 using TechChallengeFIAP.Domain.Entidades;
 
-namespace TechChallengeFIAP.Data.Mapeamentos
+namespace TechChallengeFIAP.Data.Repositorios.Mapeamentos
 {
     public class PromocaoMap : IEntityTypeConfiguration<Promocao>
     {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TechChallengeFIAP.Domain.Entidades;
 
-namespace TechChallengeFIAP.Data.Mapeamentos
+namespace TechChallengeFIAP.Data.Repositorios.Mapeamentos
 {
     public class JogoMap : IEntityTypeConfiguration<Jogo>
     {
@@ -10,7 +10,7 @@ namespace TechChallengeFIAP.Data.Mapeamentos
         {
             builder.ToTable("Jogo");
             builder.HasKey(p => p.Id);
-            builder.Property(p => p.Id).HasColumnType("INT").UseIdentityColumn();
+            builder.Property(p => p.Id).HasColumnType("UNIQUEIDENTIFIER").ValueGeneratedOnAdd();
             builder.Property(p => p.NomeJogo).HasColumnType("VARCHAR(100)");
             builder.Property(p => p.DescricaoJogo).HasColumnType("VARCHAR(100)");
             builder.Property(p => p.ClassificacaoJogo).HasColumnType("VARCHAR(100)");
