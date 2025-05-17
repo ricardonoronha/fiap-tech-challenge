@@ -10,14 +10,12 @@ namespace TechChallengeFIAP.Data.Repositorios.Mapeamentos
         {
             builder.ToTable("Jogo");
             builder.HasKey(p => p.Id);
-            builder.Property(p => p.Id).HasColumnType("UNIQUEIDENTIFIER").ValueGeneratedOnAdd();
             builder.Property(p => p.NomeJogo).HasColumnType("VARCHAR(100)");
             builder.Property(p => p.DescricaoJogo).HasColumnType("VARCHAR(100)");
             builder.Property(p => p.ClassificacaoJogo).HasColumnType("VARCHAR(100)");
             builder.Property(p => p.DataLancamento).HasColumnType("DATETIME");
             builder.Property(p => p.ValorBase).HasColumnType("DECIMAL(10,2)");
             builder.Property(p => p.ValorPromocao).HasColumnType("DECIMAL(10,2)");
-            builder.Property(p => p.EhInativo).HasColumnType("BIT"); throw new NotImplementedException();
         }
     }
 }
