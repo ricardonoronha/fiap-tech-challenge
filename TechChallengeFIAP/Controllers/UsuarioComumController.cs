@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TechChallengeFIAP.Data.Repositorios;
 
 namespace TechChallengeFIAP.Controllers;
 
@@ -7,22 +10,29 @@ namespace TechChallengeFIAP.Controllers;
 
 [Route("fiapcloudgames/user")]
 
-public class UsuarioComumController
+public class UsuarioComumController : ControllerBase
 {
+    private readonly ApplicationDbContext dbContext;
+
+    public UsuarioComumController(ApplicationDbContext dbContext)
+    {
+        this.dbContext = dbContext;
+    }
 
     [HttpGet]
     public async Task<ActionResult> ListarJogos()
     {
-        return null;
+        var jogos = dbContext.Jogo.ToList();
+        return Ok(jogos);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("ListarUmJogo/{id}")]
     public async Task<ActionResult> ListarUmJogo(int id)
     {
         return null;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("VisualizarSaldo/{id}")]
     public async Task<ActionResult> VisualizarSaldo(int id)
     {
         return null;
