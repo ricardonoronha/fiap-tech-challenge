@@ -15,6 +15,7 @@ namespace TechChallengeFIAP.Data.Repositorios.Mapeamentos
            builder.Property(p => p.DataFim).HasColumnType("DATETIME");
            builder.Property(p => p.JogoId);
            builder.Property(p => p.EhCancelada).HasColumnType("BIT");
+           builder.Property(p => p.PercentualDesconto).HasColumnType("DECIMAL(10,2)");
         }
     }
 }
