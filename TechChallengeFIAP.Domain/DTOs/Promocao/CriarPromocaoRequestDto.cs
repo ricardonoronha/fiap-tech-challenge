@@ -1,4 +1,4 @@
-﻿namespace TechChallengeFIAP.DTOs.Promocao
+﻿namespace TechChallengeFIAP.Domain.DTOs.Promocao
 {
     public class CriarPromocaoRequestDto
     {

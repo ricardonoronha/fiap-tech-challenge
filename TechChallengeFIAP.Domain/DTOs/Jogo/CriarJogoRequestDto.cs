@@ -1,4 +1,7 @@
-﻿namespace TechChallengeFIAP.DTOs.Jogo
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TechChallengeFIAP.Domain.DTOs.Jogo
+
 {
     public class CriarJogoRequestDto
     {

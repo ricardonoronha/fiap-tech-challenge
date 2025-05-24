@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TechChallengeFIAP.Data.Repositorios;
+using TechChallengeFIAP.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,8 @@ builder.Services.AddDbContext <ApplicationDbContext> (options =>
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     options.UseSqlServer(connectionString);
 });
+
+builder.Services.AddScoped<IJogosService, JogosService>(); // Adicionado services de jogos
 
 var app = builder.Build();
 

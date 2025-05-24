@@ -1,4 +1,4 @@
-﻿namespace TechChallengeFIAP.DTOs.Jogo
+﻿namespace TechChallengeFIAP.Domain.DTOs.Jogo
 {
     public class CriarJogoResponseDto
     {

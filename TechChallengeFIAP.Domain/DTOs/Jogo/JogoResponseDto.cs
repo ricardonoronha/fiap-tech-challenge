@@ -1,6 +1,6 @@
-﻿using TechChallengeFIAP.DTOs.Promocao;
+﻿using TechChallengeFIAP.Domain.DTOs.Promocao;
 
-namespace TechChallengeFIAP.DTOs.Jogo
+namespace TechChallengeFIAP.Domain.DTOs.Jogo
 {
     public class JogoResponseDto
     {

@@ -1,4 +1,6 @@
-﻿namespace TechChallengeFIAP.DTOs.Promocao
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TechChallengeFIAP.Domain.DTOs.Promocao
 {
     public class PromocaoResponseDto
     {

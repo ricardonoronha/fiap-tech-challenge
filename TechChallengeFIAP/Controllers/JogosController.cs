@@ -2,100 +2,51 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TechChallengeFIAP.Data.Repositorios;
-using TechChallengeFIAP.DTOs.Jogo;
-using TechChallengeFIAP.DTOs.Promocao;
+using TechChallengeFIAP.Domain.DTOs.Jogo;
+using TechChallengeFIAP.Domain.DTOs.Promocao;
 
 namespace TechChallengeFIAP.Controllers
 {
+
     [ApiController]
     [Route("api/jogos")]
     public class JogosController : ControllerBase
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly IJogosService _jogosService;
 
-        public JogosController(ApplicationDbContext dbContext)
+        public JogosController(IJogosService jogosService)
         {
-            this.dbContext = dbContext;
+            _jogosService = jogosService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<JogoResponseDto>>> GetJogos()
         {
-
             try
             {
-                var jogos = await dbContext.Jogo
-                .Include(j => j.Promocoes)
-                .Where(j => !j.EhInativo)
-                .ToListAsync();
-
-                var response = jogos.Select(j => new JogoResponseDto
-                {
-                    Id = j.Id,
-                    NomeJogo = j.NomeJogo,
-                    DescricaoJogo = j.DescricaoJogo,
-                    ClassificacaoJogo = j.ClassificacaoJogo,
-                    DataLancamento = j.DataLancamento,
-                    ValorBase = j.ValorBase,
-                    EhInativo = j.EhInativo,
-                    Promocoes = j.Promocoes
-                        .Where(p => !p.EhCancelada)
-                        .Select(p => new PromocaoResponseDto
-                        {
-                            Id = p.Id,
-                            DataInicio = p.DataInicio,
-                            DataFim = p.DataFim,
-                            PercentualDesconto = p.PercentualDesconto,
-                            EhCancelada = p.EhCancelada
-                        }).ToList()
-                });
-
-                return Ok(response);
+                var jogos = await _jogosService.GetJogosAsync();
+                return Ok(jogos);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<JogoResponseDto>> GetJogo(Guid id)
         {
-
             try
             {
-                var jogo = await dbContext.Jogo
-               .Include(j => j.Promocoes)
-               .FirstOrDefaultAsync(j => j.Id == id && !j.EhInativo);
-
+                var jogo = await _jogosService.GetJogoAsync(id);
                 if (jogo == null)
                     return NotFound();
 
-                var response = new JogoResponseDto
-                {
-                    Id = jogo.Id,
-                    NomeJogo = jogo.NomeJogo,
-                    DescricaoJogo = jogo.DescricaoJogo,
-                    ClassificacaoJogo = jogo.ClassificacaoJogo,
-                    DataLancamento = jogo.DataLancamento,
-                    ValorBase = jogo.ValorBase,
-                    EhInativo = jogo.EhInativo,
-                    Promocoes = jogo.Promocoes.Select(p => new PromocaoResponseDto
-                    {
-                        Id = p.Id,
-                        DataInicio = p.DataInicio,
-                        DataFim = p.DataFim,
-                        PercentualDesconto = p.PercentualDesconto,
-                        EhCancelada = p.EhCancelada
-                    }).ToList()
-                };
-
-                return Ok(response);
-
+                return Ok(jogo);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -103,33 +54,14 @@ namespace TechChallengeFIAP.Controllers
         [Authorize(Roles = "Administrador")]
         public async Task<ActionResult<CriarJogoResponseDto>> CriarJogo([FromBody] CriarJogoRequestDto dto)
         {
-
             try
             {
-                var jogo = new Jogo
-                {
-                    Id = Guid.NewGuid(),
-                    NomeJogo = dto.NomeJogo,
-                    DescricaoJogo = dto.DescricaoJogo,
-                    ClassificacaoJogo = dto.ClassificacaoJogo,
-                    DataLancamento = dto.DataLancamento,
-                    ValorBase = dto.ValorBase,
-                    EhInativo = false
-                };
-
-                dbContext.Jogo.Add(jogo);
-                await dbContext.SaveChangesAsync();
-
-                return CreatedAtAction(nameof(GetJogo), new { id = jogo.Id }, new CriarJogoResponseDto
-                {
-                    Id = jogo.Id,
-                    NomeJogo = jogo.NomeJogo
-                });
-
+                var jogoCriado = await _jogosService.CriarJogoAsync(dto);
+                return CreatedAtAction(nameof(GetJogo), new { id = jogoCriado.Id }, jogoCriado);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -137,27 +69,18 @@ namespace TechChallengeFIAP.Controllers
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> AtualizarJogo(Guid id, [FromBody] CriarJogoRequestDto dto)
         {
-
             try
             {
-                var jogo = await dbContext.Jogo.FindAsync(id);
-                if (jogo == null)
+                var atualizado = await _jogosService.AtualizarJogoAsync(id, dto);
+                if (!atualizado)
                     return NotFound();
 
-                jogo.NomeJogo = dto.NomeJogo;
-                jogo.DescricaoJogo = dto.DescricaoJogo;
-                jogo.ClassificacaoJogo = dto.ClassificacaoJogo;
-                jogo.DataLancamento = dto.DataLancamento;
-                jogo.ValorBase = dto.ValorBase;
-
-                await dbContext.SaveChangesAsync();
                 return NoContent();
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
-           
         }
 
         [HttpDelete("{id}")]
@@ -166,19 +89,15 @@ namespace TechChallengeFIAP.Controllers
         {
             try
             {
-                var jogo = await dbContext.Jogo.FindAsync(id);
-                if (jogo == null)
+                var inativado = await _jogosService.InativarJogoAsync(id);
+                if (!inativado)
                     return NotFound();
 
-                jogo.EhInativo = true;
-                await dbContext.SaveChangesAsync();
-
                 return NoContent();
-
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -186,38 +105,18 @@ namespace TechChallengeFIAP.Controllers
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> CriarPromocao(Guid jogoId, [FromBody] CriarPromocaoRequestDto dto)
         {
-
             try
             {
-                var jogo = await dbContext.Jogo.FindAsync(jogoId);
-                if (jogo == null || jogo.EhInativo)
+                var promocao = await _jogosService.CriarPromocaoAsync(jogoId, dto);
+                if (promocao == null)
                     return NotFound();
 
-                var promocao = new Promocao
-                {
-                    Id = Guid.NewGuid(),
-                    JogoId = jogoId,
-                    DataInicio = dto.DataInicio,
-                    DataFim = dto.DataFim,
-                    PercentualDesconto = dto.PercentualDesconto,
-                    EhCancelada = false
-                };
-
-                dbContext.Promocao.Add(promocao);
-                await dbContext.SaveChangesAsync();
-
-                return Ok(new CriarPromocaoResponseDto
-                {
-                    Id = promocao.Id,
-                    JogoId = jogoId,
-                    PercentualDesconto = promocao.PercentualDesconto
-                });
+                return Ok(promocao);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
-            
         }
 
         [HttpDelete("promocoes/{promocaoId}")]
@@ -226,18 +125,15 @@ namespace TechChallengeFIAP.Controllers
         {
             try
             {
-                var promocao = await dbContext.Promocao.FindAsync(promocaoId);
-                if (promocao == null)
+                var cancelado = await _jogosService.CancelarPromocaoAsync(promocaoId);
+                if (!cancelado)
                     return NotFound();
-
-                promocao.EhCancelada = true;
-                await dbContext.SaveChangesAsync();
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
     }
