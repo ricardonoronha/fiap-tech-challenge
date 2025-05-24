@@ -9,5 +9,5 @@ namespace TechChallengeFIAP.Domain.Interfaces;
 
 public interface IPessoaRepositorio
 {
-    public Task<Pessoa> GetByLogin(string login);
+    public Task<Pessoa?> GetByLogin(string login);
 }

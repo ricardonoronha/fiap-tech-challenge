@@ -4,5 +4,5 @@ namespace TechChallengeFIAP.Application.Interfaces;
 
 public interface IAuthService
 {
-    public Task<LoginResponse> LoginAsync(LoginRequest loginRequest, CancellationToken cancellationToken);
+    public Task<ILoginResponse> LoginAsync(LoginRequest loginRequest, CancellationToken cancellationToken);
 }

@@ -9,7 +9,7 @@ namespace TechChallengeFIAP.Controllers;
 
 public class AdministradorController
 {
-
+    /*
     [HttpGet]
     public async Task<ActionResult> ListarUsuarios()
     {
@@ -51,5 +51,5 @@ public class AdministradorController
     {
         return null;
     }
-
+    */
 }

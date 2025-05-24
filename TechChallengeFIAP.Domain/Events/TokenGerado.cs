@@ -7,5 +7,7 @@ using TechChallengeFIAP.Domain.Interfaces;
 
 namespace TechChallengeFIAP.Domain.Events;
 
-public record TokenGerado (string Login) : IEvent
-{ }
+public class TokenGerado (string Login) : IEvent
+{
+    public string Login { get; init; } = Login;
+}

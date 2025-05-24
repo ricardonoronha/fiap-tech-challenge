@@ -7,5 +7,7 @@ using TechChallengeFIAP.Domain.Interfaces;
 
 namespace TechChallengeFIAP.Domain.Events;
 
-public record TentativaAcesso(string Login) : IEvent
-{  }
+public class TentativaAcesso(string Login) : IEvent
+{
+    public string Login { get; init; } = Login;
+}

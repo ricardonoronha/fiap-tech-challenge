@@ -12,6 +12,8 @@ namespace TechChallengeFIAP.Domain.Entidades
     {
         public Guid Id { get; set; }
         public DateTime Data { get; set; }
+        public Guid? PessoaId { get; set; }
+        public Pessoa? Pessoa { get; set; }
         public string Evento { get; set; } = string.Empty;
         public string DadosEvento { get; set; } = string.Empty;
 
@@ -19,14 +21,19 @@ namespace TechChallengeFIAP.Domain.Entidades
         { }
 
 
-        public static RegistroEvento From(IEvent evento)
-            => new()
+        public static RegistroEvento From(Pessoa? pessoa, object evento)
+        {
+            string dadosEvento = JsonSerializer.Serialize(evento);
+
+            return new()
             {
                 Id = Guid.NewGuid(),
                 Data = DateTime.Now,
+                PessoaId = pessoa?.Id,
                 Evento = evento.GetType().Name,
-                DadosEvento = JsonSerializer.Serialize(evento)
+                DadosEvento = dadosEvento
             };
+        }
 
     }
 }

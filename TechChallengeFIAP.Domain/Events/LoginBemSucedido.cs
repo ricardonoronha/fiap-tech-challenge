@@ -7,5 +7,7 @@ using TechChallengeFIAP.Domain.Interfaces;
 
 namespace TechChallengeFIAP.Domain.Events;
 
-public record LoginBemSucedido (string Login) : IEvent
-{  }
+public class LoginBemSucedido (string Login) : IEvent
+{
+    public string Login { get; init; } = Login;
+}

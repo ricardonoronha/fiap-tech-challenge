@@ -9,9 +9,9 @@ public class Pessoa : IEntidadeBase
     public string NomeUsuario { get; set; } = string.Empty;
     public string EmailUsuario { get; set; } = string.Empty;
     public DateTime DataNascimento { get; set; }
-    public string HashSenha { get; private set; } = string.Empty;
-    public bool EhAdministrador { get; private set; }
-    public bool EhAtivo { get; private set; }
+    public string HashSenha { get; set; } = string.Empty;
+    public bool EhAdministrador { get; set; }
+    public bool EhAtivo { get; set; }
     public DateTime DataCriacao { get; set; }
     public string UsuarioCriador { get; set; } = string.Empty;
     public DateTime? DataAtualizacao { get; set; }

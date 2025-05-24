@@ -8,6 +8,6 @@ namespace TechChallengeFIAP.Domain.Interfaces
 {
     public interface IUnitOfWork
     {
-        public Task SaveChangesAsync();
+        public Task<int> SaveChangesAsync();
     }
 }

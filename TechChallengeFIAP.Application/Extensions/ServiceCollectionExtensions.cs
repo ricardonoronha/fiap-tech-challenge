@@ -7,16 +7,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TechChallengeFIAP.Application.Interfaces;
+using TechChallengeFIAP.Application.Services;
 using TechChallengeFIAP.Application.Settings;
+using TechChallengeFIAP.Data;
 using TechChallengeFIAP.Data.Repositorios;
+using TechChallengeFIAP.Domain.Interfaces;
 
 
 namespace TechChallengeFIAP.Application.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    public static IServiceCollection AddAppServices(this IServiceCollection services)
+    {
+        return services
+            .AddSingleton<ISenhaHasher, SenhaHasher>()
+            .AddScoped<IAuthService, AuthService>()
+            .AddScoped<IPessoaRepositorio, PessoaRepositorio>()
+            .AddScoped<IEventStoreRepository, EventStoreRepository>()
+            .AddScoped<IUnitOfWork, UnitOfWork>();
+        
+    }
+
     public static IServiceCollection AddBasicServices(this IServiceCollection services, IConfiguration configuration)
     {
+        var jwtSettings = new JwtSettings();
+        
+        configuration
+            .GetSection("JwtSettings")
+            .Bind(jwtSettings);
+
+
         services
             .AddDbContext<ApplicationDbContext>(options =>
             {
@@ -24,7 +46,8 @@ public static class ServiceCollectionExtensions
                 options.UseSqlServer(connectionString);
             })
             .AddStandardOptions<JwtSettings>()
-            .AddJwtAuthentication(configuration);
+            .AddJwtAuthentication(configuration)
+            .AddAppServices();
 
         return services;
     }
@@ -32,8 +55,11 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddStandardOptions<T>(this IServiceCollection services)
         where T : class
     {
+        string sectionTypeName = typeof(T).Name;
+
         services
-            .AddOptions<T>(nameof(T))
+            .AddOptions<T>()
+            .BindConfiguration(sectionTypeName)
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
@@ -72,4 +98,6 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
+
+   
 }

@@ -40,7 +40,7 @@ public class AuthService : IAuthService
     }
 
 
-    public async Task<LoginResponse> LoginAsync(LoginRequest request, CancellationToken cancellationToken)
+    public async Task<ILoginResponse> LoginAsync(LoginRequest request, CancellationToken cancellationToken)
     {
         var events = new List<IEvent>
         {
@@ -57,23 +57,20 @@ public class AuthService : IAuthService
 
             events.Add(new TokenGerado(request.Login));
 
-            _eventStoreRepository.SaveEvents(events);
+            _eventStoreRepository.SaveEvents(pessoa, events);
 
             await _unitOfWork.SaveChangesAsync();
 
-            return LoginResponse
-                .Sucesso(pessoa.NomeCompleto, pessoa.EmailUsuario, pessoa.EhAdministrador, token);
+            return new LoginBemSucedidoResponse(pessoa.NomeCompleto, pessoa.EmailUsuario, token, pessoa.EhAdministrador);
         }
 
         events.Add(new LoginFalho(request.Login));
 
-        _eventStoreRepository.SaveEvents(events);
+        _eventStoreRepository.SaveEvents(pessoa, events);
 
         await _unitOfWork.SaveChangesAsync();
 
-        return LoginResponse.Error("Login inválido");
-
-
+        return new LoginFalhoResponse("Login inválido");
     }
 
     public Task<string> GerarTokenAsync(Guid userId, string email, bool ehAdministrador)

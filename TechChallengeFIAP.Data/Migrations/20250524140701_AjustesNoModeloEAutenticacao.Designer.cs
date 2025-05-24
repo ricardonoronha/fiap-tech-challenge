@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechChallengeFIAP.Data.Repositorios;
 
@@ -11,9 +12,11 @@ using TechChallengeFIAP.Data.Repositorios;
 namespace TechChallengeFIAP.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250524140701_AjustesNoModeloEAutenticacao")]
+    partial class AjustesNoModeloEAutenticacao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,13 +173,7 @@ namespace TechChallengeFIAP.Data.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("Evento");
 
-                    b.Property<Guid?>("PessoaId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("PessoaId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PessoaId");
 
                     b.ToTable("RegistroEvento", (string)null);
                 });
@@ -190,15 +187,6 @@ namespace TechChallengeFIAP.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Jogo");
-                });
-
-            modelBuilder.Entity("TechChallengeFIAP.Domain.Entidades.RegistroEvento", b =>
-                {
-                    b.HasOne("TechChallengeFIAP.Domain.Entidades.Pessoa", "Pessoa")
-                        .WithMany()
-                        .HasForeignKey("PessoaId");
-
-                    b.Navigation("Pessoa");
                 });
 
             modelBuilder.Entity("TechChallengeFIAP.Domain.Entidades.Jogo", b =>
