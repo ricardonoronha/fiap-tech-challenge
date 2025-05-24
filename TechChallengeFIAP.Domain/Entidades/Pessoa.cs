@@ -17,7 +17,6 @@ public class Pessoa : IEntidadeBase
     public DateTime? DataAtualizacao { get; set; }
     public string UsuarioAtualizador { get; set; } = string.Empty;
 
-
     public override string ToString()
     {
         return NomeCompleto.ToString();
