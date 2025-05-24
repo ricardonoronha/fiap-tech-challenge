@@ -11,10 +11,10 @@ namespace TechChallengeFIAP.Data.Repositorios;
 
 public class PessoaRepositorio(ApplicationDbContext DbContext) : IPessoaRepositorio
 {
-    public Task<Pessoa?> GetByLogin(string login)
+    public Task<Pessoa?> GetByEmail(string email)
     {
         return DbContext
             .Pessoa
-            .SingleOrDefaultAsync(x => x.NomeUsuario == login);
+            .SingleOrDefaultAsync(x => x.EmailUsuario == email);
     }
 }

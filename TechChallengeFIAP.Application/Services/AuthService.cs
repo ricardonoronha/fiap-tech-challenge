@@ -44,18 +44,18 @@ public class AuthService : IAuthService
     {
         var events = new List<IEvent>
         {
-            new TentativaAcesso(request.Login)
+            new TentativaAcesso(request.Email)
         };
 
-        var pessoa = await _pessoaRepository.GetByLogin(request.Login);
+        var pessoa = await _pessoaRepository.GetByEmail(request.Email);
 
         if (pessoa is not null && _senhaHasher.VerificarSenha(request.Senha, pessoa.HashSenha))
         {
-            events.Add(new LoginBemSucedido(request.Login));
+            events.Add(new LoginBemSucedido(request.Email));
 
             var token = await GerarTokenAsync(pessoa.Id, pessoa.EmailUsuario, pessoa.EhAdministrador);
 
-            events.Add(new TokenGerado(request.Login));
+            events.Add(new TokenGerado(request.Email));
 
             _eventStoreRepository.SaveEvents(pessoa, events);
 
@@ -64,7 +64,7 @@ public class AuthService : IAuthService
             return new LoginBemSucedidoResponse(pessoa.NomeCompleto, pessoa.EmailUsuario, token, pessoa.EhAdministrador);
         }
 
-        events.Add(new LoginFalho(request.Login));
+        events.Add(new LoginFalho(request.Email));
 
         _eventStoreRepository.SaveEvents(pessoa, events);
 
