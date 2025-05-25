@@ -1,10 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using TechChallengeFIAP.Application.Interfaces;
@@ -27,13 +30,13 @@ public static class ServiceCollectionExtensions
             .AddScoped<IPessoaRepositorio, PessoaRepositorio>()
             .AddScoped<IEventStoreRepository, EventStoreRepository>()
             .AddScoped<IUnitOfWork, UnitOfWork>();
-        
+
     }
 
     public static IServiceCollection AddBasicServices(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtSettings = new JwtSettings();
-        
+
         configuration
             .GetSection("JwtSettings")
             .Bind(jwtSettings);
@@ -99,5 +102,34 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-   
+
+    public static IServiceCollection AddProblemDetailsForModelRequestValidation(this IServiceCollection services)
+    {
+        services.Configure<ApiBehaviorOptions>(options =>
+        {
+            options.InvalidModelStateResponseFactory = context =>
+            {
+                var listaErros = context.ModelState
+                    .Where(e => e.Value?.Errors.Count > 0)
+                    .SelectMany(e => e.Value?.Errors?.Select(er => er.ErrorMessage) ?? [])
+                    .ToList();
+
+                return new BadRequestObjectResult(new ProblemDetails()
+                {
+                    Detail = "Requisição contém campos com valores inválidos, verifique a lista 'Erros'.",
+                    Status = StatusCodes.Status400BadRequest,
+                    Title = "Requisição Inválida",
+                    Extensions = 
+                    {
+                        {  "Erros", listaErros }
+                    }
+                });
+            };
+        });
+
+        return services;
+    }
+
+
+
 }

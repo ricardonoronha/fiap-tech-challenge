@@ -1,5 +1,5 @@
 using TechChallengeFIAP.Application.Extensions;
-using Microsoft.AspNetCore.Mvc;
+using TechChallengeFIAP.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,28 +9,8 @@ builder
     .Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen()
-    .AddBasicServices(builder.Configuration);
-
-builder.Services.Configure<ApiBehaviorOptions>(options =>
-{
-    options.InvalidModelStateResponseFactory = context =>
-    {
-        var errors = context.ModelState
-            .Where(e => e.Value?.Errors.Count > 0)
-            .Select(e => new
-            {
-                Field = e.Key,
-                Errors = e.Value?.Errors?.Select(er => er.ErrorMessage) ?? []
-            });
-
-        return new BadRequestObjectResult(new
-        {
-            MensagemErro = "Erro de validação",
-            Erros = errors
-        });
-    };
-});
-
+    .AddBasicServices(builder.Configuration)
+    .AddProblemDetailsForModelRequestValidation();
 
 var app = builder.Build();
 
@@ -42,6 +22,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthorization();
 
