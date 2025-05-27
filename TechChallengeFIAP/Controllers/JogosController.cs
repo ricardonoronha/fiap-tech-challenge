@@ -136,5 +136,13 @@ namespace TechChallengeFIAP.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("promocoes/ativas")]
+        public async Task<IActionResult> GetPromocoesAtivas()
+        {
+            var promocoes = await _jogosService.GetPromocoesAtivasAsync();
+            return Ok(promocoes);
+        }
+
     }
 }

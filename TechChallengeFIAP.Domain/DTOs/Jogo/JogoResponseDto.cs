@@ -11,6 +11,8 @@ namespace TechChallengeFIAP.Domain.DTOs.Jogo
         public string ClassificacaoJogo { get; set; }
         public DateTime DataLancamento { get; set; }
         public decimal ValorBase { get; set; }
+        public decimal PrecoFinal { get; set; } // <-- novo
+        public bool EhPromocional { get; set; } // <-- novo
         public bool EhInativo { get; set; }
         public List<PromocaoResponseDto> Promocoes { get; set; }
 

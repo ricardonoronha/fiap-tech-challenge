@@ -16,6 +16,7 @@ namespace TechChallengeFIAP.Domain.Interfaces
         Task<bool> InativarJogoAsync(Guid id);
         Task<CriarPromocaoResponseDto?> CriarPromocaoAsync(Guid jogoId, CriarPromocaoRequestDto dto);
         Task<bool> CancelarPromocaoAsync(Guid promocaoId);
+        Task<IEnumerable<PromocaoResponseDto>> GetPromocoesAtivasAsync();
 
     }
 

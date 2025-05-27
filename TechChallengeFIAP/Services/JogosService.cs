@@ -23,25 +23,40 @@ namespace TechChallengeFIAP.Services
                 .Where(j => !j.EhInativo)
                 .ToListAsync();
 
-            return jogos.Select(j => new JogoResponseDto
+            var agora = DateTime.UtcNow;
+
+            return jogos.Select(j =>
             {
-                Id = j.Id,
-                NomeJogo = j.NomeJogo,
-                DescricaoJogo = j.DescricaoJogo,
-                ClassificacaoJogo = j.ClassificacaoJogo,
-                DataLancamento = j.DataLancamento,
-                ValorBase = j.ValorBase,
-                EhInativo = j.EhInativo,
-                Promocoes = j.Promocoes
-                    .Where(p => !p.EhCancelada)
-                    .Select(p => new PromocaoResponseDto
-                    {
-                        Id = p.Id,
-                        DataInicio = p.DataInicio,
-                        DataFim = p.DataFim,
-                        PercentualDesconto = p.PercentualDesconto,
-                        EhCancelada = p.EhCancelada
-                    }).ToList()
+                var promocaoAtiva = j.Promocoes
+                    .FirstOrDefault(p => !p.EhCancelada && p.DataInicio <= agora && p.DataFim >= agora);
+
+                var ehPromocional = promocaoAtiva != null;
+                var valorFinal = ehPromocional
+                    ? j.ValorBase * (1 - (promocaoAtiva.PercentualDesconto / 100))
+                    : j.ValorBase;
+
+                return new JogoResponseDto
+                {
+                    Id = j.Id,
+                    NomeJogo = j.NomeJogo,
+                    DescricaoJogo = j.DescricaoJogo,
+                    ClassificacaoJogo = j.ClassificacaoJogo,
+                    DataLancamento = j.DataLancamento,
+                    ValorBase = j.ValorBase,
+                    PrecoFinal = Math.Round(valorFinal, 2),
+                    EhPromocional = ehPromocional,
+                    EhInativo = j.EhInativo,
+                    Promocoes = j.Promocoes
+                        .Where(p => !p.EhCancelada)
+                        .Select(p => new PromocaoResponseDto
+                        {
+                            Id = p.Id,
+                            DataInicio = p.DataInicio,
+                            DataFim = p.DataFim,
+                            PercentualDesconto = p.PercentualDesconto,
+                            EhCancelada = p.EhCancelada
+                        }).ToList()
+                };
             });
         }
 
@@ -54,6 +69,16 @@ namespace TechChallengeFIAP.Services
             if (jogo == null)
                 return null;
 
+            var agora = DateTime.UtcNow;
+
+            var promocaoAtiva = jogo.Promocoes
+                .FirstOrDefault(p => !p.EhCancelada && p.DataInicio <= agora && p.DataFim >= agora);
+
+            var ehPromocional = promocaoAtiva != null;
+            var valorFinal = ehPromocional
+                ? jogo.ValorBase * (1 - (promocaoAtiva.PercentualDesconto / 100))
+                : jogo.ValorBase;
+
             return new JogoResponseDto
             {
                 Id = jogo.Id,
@@ -62,15 +87,19 @@ namespace TechChallengeFIAP.Services
                 ClassificacaoJogo = jogo.ClassificacaoJogo,
                 DataLancamento = jogo.DataLancamento,
                 ValorBase = jogo.ValorBase,
+                PrecoFinal = Math.Round(valorFinal, 2),
+                EhPromocional = ehPromocional,
                 EhInativo = jogo.EhInativo,
-                Promocoes = jogo.Promocoes.Select(p => new PromocaoResponseDto
-                {
-                    Id = p.Id,
-                    DataInicio = p.DataInicio,
-                    DataFim = p.DataFim,
-                    PercentualDesconto = p.PercentualDesconto,
-                    EhCancelada = p.EhCancelada
-                }).ToList()
+                Promocoes = jogo.Promocoes
+                    .Where(p => !p.EhCancelada)
+                    .Select(p => new PromocaoResponseDto
+                    {
+                        Id = p.Id,
+                        DataInicio = p.DataInicio,
+                        DataFim = p.DataFim,
+                        PercentualDesconto = p.PercentualDesconto,
+                        EhCancelada = p.EhCancelada
+                    }).ToList()
             };
         }
 
@@ -157,6 +186,26 @@ namespace TechChallengeFIAP.Services
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
+        public async Task<IEnumerable<PromocaoResponseDto>> GetPromocoesAtivasAsync()
+        {
+            var agora = DateTime.UtcNow;
+
+            var promocoes = await _dbContext.Promocao
+                .Include(p => p.Jogo)
+                .Where(p => !p.EhCancelada && p.DataInicio <= agora && p.DataFim >= agora && !p.Jogo.EhInativo)
+                .ToListAsync();
+
+            return promocoes.Select(p => new PromocaoResponseDto
+            {
+                Id = p.Id,
+                DataInicio = p.DataInicio,
+                DataFim = p.DataFim,
+                PercentualDesconto = p.PercentualDesconto,
+                EhCancelada = p.EhCancelada
+            });
+        }
+
     }
 
 }
