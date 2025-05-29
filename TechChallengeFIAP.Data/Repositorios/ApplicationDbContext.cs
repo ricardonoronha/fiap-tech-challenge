@@ -12,14 +12,14 @@ namespace TechChallengeFIAP.Data.Repositorios
 
         public ApplicationDbContext()
         {
-        }
+        
 
         public DbSet<Jogo> Jogo { get; set; }
         public DbSet<Pessoa> Pessoa { get; set; }
         public DbSet<Promocao> Promocao { get; set; }
         public DbSet<EventStore> EventStore { get; set; }
-
-
+        }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
