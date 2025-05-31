@@ -14,7 +14,7 @@ namespace TechChallengeFIAP.Data.Repositorios
         {
         }
 
-        public DbSet<RegistroEvento> Jogo { get; set; }
+        public DbSet<Jogo> Jogo { get; set; }
         public DbSet<Pessoa> Pessoa { get; set; }
         public DbSet<Promocao> Promocao { get; set; }
         public DbSet<Pessoa> Pessoas { get; set; }
