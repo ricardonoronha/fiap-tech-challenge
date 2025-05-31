@@ -3,8 +3,17 @@ using TechChallengeFIAP.Data.Repositorios;
 using TechChallengeFIAP.Services;
 using TechChallengeFIAP.Application.Extensions;
 using TechChallengeFIAP.Middlewares;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using TechChallengeFIAP.Domain.Validacao;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+
+builder.Services.AddValidatorsFromAssemblyContaining<PessoaValidacao>();
+builder.Services.AddValidatorsFromAssemblyContaining<JogoValidacao>();
 
 builder.Services.AddControllers();
 
