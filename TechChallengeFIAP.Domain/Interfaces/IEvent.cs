@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TechChallengeFIAP.Domain.Events;
-
-public class LoginBemSucedidoEvent
+namespace TechChallengeFIAP.Domain.Interfaces
 {
+    public interface IEvent
+    { }
 }

@@ -13,13 +13,13 @@ namespace TechChallengeFIAP.Data.Repositorios.Mapeamentos
             builder.Property(p => p.NomeCompleto).HasColumnType("VARCHAR(100)");
             builder.Property(p => p.NomeUsuario).HasColumnType("VARCHAR(100)");
             builder.Property(p => p.EmailUsuario).HasColumnType("VARCHAR(100)");
-            builder.Property(p => p.DataNascimento).HasColumnType("DATETIME");
+            builder.Property(p => p.DataNascimento).HasColumnType("DATETIME2");
             builder.Property(p => p.HashSenha).HasColumnType("VARCHAR(100)");
             builder.Property(p => p.EhAdministrador).HasColumnType("BIT");
             builder.Property(p => p.EhAtivo).HasColumnType("BIT");
-            builder.Property(p => p.DataCriacao).HasColumnType("DATETIME");
+            builder.Property(p => p.DataCriacao).HasColumnType("DATETIME2");
             builder.Property(p => p.UsuarioCriador).HasColumnType("VARCHAR(100)");
-            builder.Property(p => p.DataAtualizacao).HasColumnType("DATETIME");
+            builder.Property(p => p.DataAtualizacao).HasColumnType("DATETIME2");
             builder.Property(p => p.UsuarioAtualizador).HasColumnType("VARCHAR(100)");
         }
     }

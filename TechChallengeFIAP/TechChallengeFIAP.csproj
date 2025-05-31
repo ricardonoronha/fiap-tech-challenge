@@ -4,9 +4,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>a1fd3bef-2f0e-46a1-98a5-c54ef4af5dd5</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.16">
       <PrivateAssets>all</PrivateAssets>
@@ -16,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TechChallengeFIAP.Application\TechChallengeFIAP.Application.csproj" />
     <ProjectReference Include="..\TechChallengeFIAP.Data\TechChallengeFIAP.Data.csproj" />
     <ProjectReference Include="..\TechChallengeFIAP.Domain\TechChallengeFIAP.Domain.csproj" />
   </ItemGroup>

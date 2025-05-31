@@ -12,6 +12,7 @@ namespace TechChallengeFIAP.Controllers;
 
 public class UsuarioComumController : ControllerBase
 {
+    /*
     private readonly ApplicationDbContext dbContext;
 
     public UsuarioComumController(ApplicationDbContext dbContext)
@@ -55,5 +56,5 @@ public class UsuarioComumController : ControllerBase
     {
         return null;
     }
-
+    */
 }
