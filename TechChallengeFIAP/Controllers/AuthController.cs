@@ -8,13 +8,14 @@ namespace TechChallengeFIAP.Controllers
     [ApiController]
     public class AuthController(IAuthService AuthService) : ControllerBase
     {
-        [HttpPost]
+
+        [HttpPost("login")]
         [ProducesResponseType(typeof(LoginBemSucedidoResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(LoginFalhoResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
         {
 
-            
+
 
             var result = await AuthService.LoginAsync(request, cancellationToken);
 
