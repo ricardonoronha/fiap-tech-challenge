@@ -1,5 +1,8 @@
 using TechChallengeFIAP.Application.Extensions;
 using TechChallengeFIAP.Middlewares;
+using DotNetEnv;
+
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
