@@ -8,5 +8,5 @@ namespace TechChallengeFIAP.Domain.Interfaces;
 
 public interface IPessoaRepositorio
 {
-
+    Task<bool> EmailExistenteAsync(string email);
 }
