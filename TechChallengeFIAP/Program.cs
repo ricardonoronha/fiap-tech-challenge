@@ -1,10 +1,22 @@
 using TechChallengeFIAP.Application.Extensions;
 using TechChallengeFIAP.Middlewares;
 using DotNetEnv;
+using Microsoft.EntityFrameworkCore;
+using TechChallengeFIAP.Data.Repositorios;
+using TechChallengeFIAP.Services;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using TechChallengeFIAP.Domain.Validacao;
 
 Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+
+builder.Services.AddValidatorsFromAssemblyContaining<PessoaValidacao>();
+builder.Services.AddValidatorsFromAssemblyContaining<JogoValidacao>();
 
 builder.Services.AddControllers();
 
@@ -13,7 +25,8 @@ builder
     .AddEndpointsApiExplorer()
     .AddSwaggerGen()
     .AddBasicServices(builder.Configuration)
-    .AddProblemDetailsForModelRequestValidation();
+    .AddProblemDetailsForModelRequestValidation()
+    .AddScoped<IJogosService, JogosService>(); // Adicionado services de jogos
 
 var app = builder.Build();
 
