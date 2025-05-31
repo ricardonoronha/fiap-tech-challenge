@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using TechChallengeFIAP.Data.Repositorios;
+using TechChallengeFIAP.Services;
 using TechChallengeFIAP.Application.Extensions;
 using TechChallengeFIAP.Middlewares;
 
@@ -11,6 +14,8 @@ builder
     .AddSwaggerGen()
     .AddBasicServices(builder.Configuration)
     .AddProblemDetailsForModelRequestValidation();
+
+builder.Services.AddScoped<IJogosService, JogosService>(); // Adicionado services de jogos
 
 var app = builder.Build();
 

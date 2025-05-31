@@ -11,5 +11,5 @@ public class Jogo
     public decimal ValorPromocao { get; set; }
     public bool EhInativo { get; set; }
 
-    public ICollection<Promocao> Promocoes { get; set; } = new List<Promocao>();
+    public ICollection<Promocao> Promocoes { get; set; }
 }
