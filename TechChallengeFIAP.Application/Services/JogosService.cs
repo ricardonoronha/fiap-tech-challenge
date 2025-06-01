@@ -1,11 +1,12 @@
-﻿using TechChallengeFIAP.Data.Repositorios;
+﻿using Microsoft.EntityFrameworkCore;
+using TechChallengeFIAP.Data.Repositorios;
 using TechChallengeFIAP.Domain.DTOs.Jogo;
 using TechChallengeFIAP.Domain.DTOs.Promocao;
 using TechChallengeFIAP.Domain.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using TechChallengeFIAP.Domain.Entidades;
 
 
-namespace TechChallengeFIAP.Services
+namespace TechChallengeFIAP.Application.Services
 {
     public class JogosService : IJogosService
     {
