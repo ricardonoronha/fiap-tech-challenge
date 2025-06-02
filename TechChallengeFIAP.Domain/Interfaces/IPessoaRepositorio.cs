@@ -9,5 +9,8 @@ namespace TechChallengeFIAP.Domain.Interfaces;
 
 public interface IPessoaRepositorio
 {
-    public Task<Pessoa?> GetByEmail(string email);
+    Task<Pessoa?> GetByEmail(string email);
+    void AddPessoa(Pessoa pessoa);
+
+    Task<bool> VerificarEhEmailIndisponivel(string email);
 }

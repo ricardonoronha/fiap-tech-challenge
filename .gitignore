@@ -402,3 +402,6 @@ FodyWeavers.xsd
 
 # DotEnv files
 **/.env
+
+# VS Code Info
+.vscode/

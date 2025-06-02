@@ -59,7 +59,7 @@ public class AuthService : IAuthService
 
             _eventStoreRepository.SaveEvents(pessoa, events);
 
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return new LoginBemSucedidoResponse(pessoa.NomeCompleto, pessoa.EmailUsuario, token, pessoa.EhAdministrador);
         }
@@ -68,7 +68,7 @@ public class AuthService : IAuthService
 
         _eventStoreRepository.SaveEvents(pessoa, events);
 
-        await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return new LoginFalhoResponse("Login inválido");
     }
@@ -88,7 +88,7 @@ public class AuthService : IAuthService
         ];
 
         if (ehAdministrador)
-            claims.Add(new(ClaimTypes.Role, "admin"));
+            claims.Add(new(ClaimTypes.Role, "Administrador"));
 
         var token = new JwtSecurityToken(
             issuer: _jwtSettings.Issuer,

@@ -1,11 +1,12 @@
-﻿using TechChallengeFIAP.Data.Repositorios;
+﻿using Microsoft.EntityFrameworkCore;
+using TechChallengeFIAP.Data.Repositorios;
 using TechChallengeFIAP.Domain.DTOs.Jogo;
 using TechChallengeFIAP.Domain.DTOs.Promocao;
 using TechChallengeFIAP.Domain.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using TechChallengeFIAP.Domain.Entidades;
 
 
-namespace TechChallengeFIAP.Services
+namespace TechChallengeFIAP.Application.Services
 {
     public class JogosService : IJogosService
     {
@@ -27,13 +28,7 @@ namespace TechChallengeFIAP.Services
 
             return jogos.Select(j =>
             {
-                var promocaoAtiva = j.Promocoes
-                    .FirstOrDefault(p => !p.EhCancelada && p.DataInicio <= agora && p.DataFim >= agora);
-
-                var ehPromocional = promocaoAtiva != null;
-                var valorFinal = ehPromocional
-                    ? j.ValorBase * (1 - (promocaoAtiva.PercentualDesconto / 100))
-                    : j.ValorBase;
+                var (valorFinal, ehPromocional) = j.ObterValorFinal();
 
                 return new JogoResponseDto
                 {
@@ -69,15 +64,7 @@ namespace TechChallengeFIAP.Services
             if (jogo == null)
                 return null;
 
-            var agora = DateTime.UtcNow;
-
-            var promocaoAtiva = jogo.Promocoes
-                .FirstOrDefault(p => !p.EhCancelada && p.DataInicio <= agora && p.DataFim >= agora);
-
-            var ehPromocional = promocaoAtiva != null;
-            var valorFinal = ehPromocional
-                ? jogo.ValorBase * (1 - (promocaoAtiva.PercentualDesconto / 100))
-                : jogo.ValorBase;
+            var (valorFinal, ehPromocional) = jogo.ObterValorFinal();
 
             return new JogoResponseDto
             {
