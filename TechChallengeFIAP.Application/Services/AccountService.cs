@@ -13,7 +13,7 @@ public class AccountService(
     ISenhaHasher SenhaHasher,
     IUnitOfWork UnitOfWork) : IAccountService
 {
-    public async Task<IRegistrarUsuarioResponseDto> RegistrarUsuario(RegistrarUsuarioRequestDto request, UserInfo? userInfo)
+    public async Task<IRegistrarUsuarioResponseDto> RegistrarUsuario(RegistrarUsuarioRequestDto request, UserInfo? userInfo, CancellationToken cancellationToken)
     {
         var validacaoRequest = await RegistrarUsuarioRequestValidador.ValidarAsync(request, userInfo);
 
@@ -35,7 +35,7 @@ public class AccountService(
 
         PessoaRepositorio.AddPessoa(pessoa);
 
-        await UnitOfWork.SaveChangesAsync();
+        await UnitOfWork.SaveChangesAsync(cancellationToken);
 
         return new UsuarioRegistradoResponseDto(pessoa.Id, pessoa.EhAdministrador);
     }

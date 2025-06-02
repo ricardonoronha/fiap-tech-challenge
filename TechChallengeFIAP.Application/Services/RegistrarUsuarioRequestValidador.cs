@@ -1,24 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TechChallengeFIAP.Domain.DTOs.Account;
 using TechChallengeFIAP.Domain.DTOs.Seguranca;
-using TechChallengeFIAP.Data;
-using TechChallengeFIAP.Data.Migrations;
-using TechChallengeFIAP.Domain.DTOs.Account;
-using TechChallengeFIAP.Domain.DTOs.Seguranca;
-using TechChallengeFIAP.Domain.Entidades;
 using TechChallengeFIAP.Domain.Interfaces;
-
+using System.Text.RegularExpressions;
 
 namespace TechChallengeFIAP.Application.Services;
 
-
 public class RegistrarUsuarioRequestValidador(
     IPessoaRepositorio PessoaRepositorio,
-    ISenhaValidator SenhaValidador) 
+    ISenhaValidator SenhaValidador)
     : IRegistrarUsuarioRequestValidador
 {
     public async Task<IEnumerable<RegistrarUsuarioErrorItem>> ValidarAsync(RegistrarUsuarioRequestDto request, UserInfo? userInfo)
@@ -42,6 +31,18 @@ public class RegistrarUsuarioRequestValidador(
                 Errors = [new() { Codigo = "NaoInformado", Descricao = "Campo 'E-mail' é obrigatório" }]
             });
 
+            return;
+        }
+
+        bool ehEmailValido = Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+
+        if (!ehEmailValido)
+        {
+            resultadoValidacao.Add(new()
+            {
+                Campo = nameof(RegistrarUsuarioRequestDto.Email),
+                Errors = [new() { Codigo = "FormatoInvalido", Descricao = "Formato de e-mail inválido" }]
+            });
             return;
         }
 
@@ -103,7 +104,7 @@ public class RegistrarUsuarioRequestValidador(
             resultadoValidacao.Add(new()
             {
                 Campo = nameof(RegistrarUsuarioRequestDto.Senha),
-                Errors = [new() { Codigo = "NaoInformado", Descricao = "Campos 'Senha' e 'Senha Confirmada' são diferentes" }]
+                Errors = [new() { Codigo = "ConfirmacaoDiferente", Descricao = "Campos 'Senha' e 'Senha Confirmada' são diferentes" }]
             });
 
             return;
@@ -137,7 +138,7 @@ public class RegistrarUsuarioRequestValidador(
     public void AddValidacaoEhAdministrador(bool ehAdministrador, UserInfo? userInfo, List<RegistrarUsuarioErrorItem> resultadoValidacao)
     {
         bool ehCadastroPorAdministrador = userInfo?.EhAdministrador ?? false;
-        
+
         if (ehAdministrador && !ehCadastroPorAdministrador)
         {
             resultadoValidacao.Add(new()

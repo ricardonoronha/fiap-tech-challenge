@@ -10,9 +10,9 @@ namespace TechChallengeFIAP.Data
 {
     public class UnitOfWork(ApplicationDbContext DbContext) : IUnitOfWork
     {
-        public Task<int> SaveChangesAsync()
+        public Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
-            return DbContext.SaveChangesAsync();
+            return DbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

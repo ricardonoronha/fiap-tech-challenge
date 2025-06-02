@@ -15,13 +15,12 @@ namespace TechChallengeFIAP.Controllers
         public async Task<IActionResult> Register([FromBody] RegistrarUsuarioRequestDto request, CancellationToken cancellationToken)
         {
             var userInfo = UserInfoService.ObterUsuario();
-            var resultado = await AccountService.RegistrarUsuario(request, userInfo);
+            var resultado = await AccountService.RegistrarUsuario(request, userInfo, cancellationToken);
 
             if (!resultado.IsSuccessful)
                 return BadRequest(resultado);
 
             return Ok(resultado);
-            
         }
     }
 }

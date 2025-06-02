@@ -4,18 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using TechChallengeFIAP.Application.Interfaces;
 using TechChallengeFIAP.Application.Services;
 using TechChallengeFIAP.Application.Settings;
 using TechChallengeFIAP.Data;
 using TechChallengeFIAP.Data.Repositorios;
 using TechChallengeFIAP.Domain.Interfaces;
+
 
 
 namespace TechChallengeFIAP.Application.Extensions;
@@ -29,8 +25,13 @@ public static class ServiceCollectionExtensions
             .AddScoped<IAuthService, AuthService>()
             .AddScoped<IPessoaRepositorio, PessoaRepositorio>()
             .AddScoped<IEventStoreRepository, EventStoreRepository>()
-            .AddScoped<IUnitOfWork, UnitOfWork>();
-
+            .AddScoped<IUnitOfWork, UnitOfWork>()
+            .AddHttpContextAccessor()
+            .AddScoped<IJogosService, JogosService>()
+            .AddScoped<IAccountService, AccountService>()
+            .AddScoped<IRegistrarUsuarioRequestValidador, RegistrarUsuarioRequestValidador>()
+            .AddScoped<IUserInfoService, UserInfoService>()
+            .AddScoped<ISenhaValidator, SenhaValidator>();
     }
 
     public static IServiceCollection AddBasicServices(this IServiceCollection services, IConfiguration configuration)
