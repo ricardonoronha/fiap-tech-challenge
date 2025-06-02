@@ -77,16 +77,16 @@ public class RegistrarUsuarioRequestValidador(
 
         if (string.IsNullOrWhiteSpace(senha))
         {
-            resultadoValidacao.Add(new()
+            resultadoCampo.Add(new()
             {
                 Campo = nameof(RegistrarUsuarioRequestDto.Senha),
-                Errors = [new() { Codigo = "NaoInformado", Descricao = "Campo 'Nome Completo' é obrigatório" }]
+                Errors = [new() { Codigo = "NaoInformado", Descricao = "Campo 'Senha' é obrigatório" }]
             });
         }
 
         if (string.IsNullOrWhiteSpace(senhaConfirmada))
         {
-            resultadoValidacao.Add(new()
+            resultadoCampo.Add(new()
             {
                 Campo = nameof(RegistrarUsuarioRequestDto.SenhaConfirmada),
                 Errors = [new() { Codigo = "NaoInformado", Descricao = "Campo 'Senha Confirmada' é obrigatório" }]
@@ -111,6 +111,7 @@ public class RegistrarUsuarioRequestValidador(
         }
 
         var errosFormatoSenha = SenhaValidador.Validar(senha);
+        var lista = errosFormatoSenha.ToList();
 
         if (errosFormatoSenha.Any())
         {

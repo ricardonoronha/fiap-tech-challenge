@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using TechChallengeFIAP.Application.Services;
 using TechChallengeFIAP.Domain.DTOs.Account;
@@ -10,14 +11,15 @@ public class RegistrarUsuarioRequestValidadorTests
 {
     private readonly Mock<IPessoaRepositorio> _pessoaRepositorioMock = new();
     private readonly Mock<ISenhaValidator> _senhaValidatorMock = new();
-    private readonly RegistrarUsuarioRequestValidador _validador;
+    private readonly IServiceProvider _serviceProvider;
 
     public RegistrarUsuarioRequestValidadorTests()
     {
-        _validador = new RegistrarUsuarioRequestValidador(
-            _pessoaRepositorioMock.Object,
-            _senhaValidatorMock.Object
-        );
+        _serviceProvider = new ServiceCollection()
+            .AddSingleton(_pessoaRepositorioMock.Object)
+            .AddSingleton(_senhaValidatorMock.Object)
+            .AddScoped<IRegistrarUsuarioRequestValidador, RegistrarUsuarioRequestValidador>()
+            .BuildServiceProvider();
     }
 
     [Fact]
@@ -33,9 +35,57 @@ public class RegistrarUsuarioRequestValidadorTests
             EhAdministrador = false
         };
 
-        var resultado = await _validador.ValidarAsync(request, null);
+        var validador = _serviceProvider.GetRequiredService<IRegistrarUsuarioRequestValidador>();
+
+        var resultado = await validador.ValidarAsync(request, null);
 
         Assert.Contains(resultado, r => r.Campo == "Email");
+    }
+
+    [Fact]
+    public async Task DeveRetornarErroQuandoSenhasEstiverEmBranco()
+    {
+        var request = new RegistrarUsuarioRequestDto
+        {
+            Email = "teste@teste.com",
+            NomeCompleto = "Nome",
+            Senha = "",
+            SenhaConfirmada = "",
+            DataNascimento = DateOnly.FromDateTime(DateTime.Today),
+            EhAdministrador = false
+        };
+
+        var validador = _serviceProvider.GetRequiredService<IRegistrarUsuarioRequestValidador>();
+
+        var resultado = await validador.ValidarAsync(request, null);
+
+        Assert.Contains(resultado, r => r.Campo == "Senha");
+    }
+
+    [Fact]
+    public async Task DeveRetornarErroQuandoSenhasNaoAtendemRequisitosDeSeguranca()
+    {
+        _senhaValidatorMock.Setup(x => x.Validar(It.IsAny<string>()))
+        .Returns(
+        [
+            new(){ Codigo = "TestCodigo", Descricao =  "Teste descrição" }
+        ]);
+
+        var request = new RegistrarUsuarioRequestDto
+        {
+            Email = "teste@teste.com",
+            NomeCompleto = "Nome",
+            Senha = "F@12",
+            SenhaConfirmada = "F@12",
+            DataNascimento = DateOnly.FromDateTime(DateTime.Today),
+            EhAdministrador = false
+        };
+
+        var validador = _serviceProvider.GetRequiredService<IRegistrarUsuarioRequestValidador>();
+
+        var resultado = await validador.ValidarAsync(request, null);
+
+        Assert.Contains(resultado, r => r.Campo == "Senha");
     }
 
     [Fact]
@@ -54,7 +104,9 @@ public class RegistrarUsuarioRequestValidadorTests
         _pessoaRepositorioMock.Setup(p => p.VerificarEhEmailIndisponivel(It.IsAny<string>()))
                               .ReturnsAsync(false);
 
-        var resultado = await _validador.ValidarAsync(request, null);
+        var validador = _serviceProvider.GetRequiredService<IRegistrarUsuarioRequestValidador>();
+
+        var resultado = await validador.ValidarAsync(request, null);
 
         Assert.Contains(resultado, r => r.Campo == "Email" &&
                                         r.Errors.Exists(e => e.Codigo == "FormatoInvalido"));
@@ -76,7 +128,9 @@ public class RegistrarUsuarioRequestValidadorTests
             EhAdministrador = false
         };
 
-        var resultado = await _validador.ValidarAsync(request, null);
+        var validador = _serviceProvider.GetRequiredService<IRegistrarUsuarioRequestValidador>();
+
+        var resultado = await validador.ValidarAsync(request, null);
 
         Assert.Contains(resultado, r => r.Campo == "Email" &&
                                         r.Errors.Exists(e => e.Codigo == "Indisponivel"));
@@ -95,7 +149,9 @@ public class RegistrarUsuarioRequestValidadorTests
             EhAdministrador = false
         };
 
-        var resultado = await _validador.ValidarAsync(request, null);
+        var validador = _serviceProvider.GetRequiredService<IRegistrarUsuarioRequestValidador>();
+
+        var resultado = await validador.ValidarAsync(request, null);
 
         Assert.Contains(resultado, r => r.Campo == "Senha" &&
                                         r.Errors.Exists(e => e.Codigo == "ConfirmacaoDiferente"));
@@ -114,7 +170,9 @@ public class RegistrarUsuarioRequestValidadorTests
             EhAdministrador = false
         };
 
-        var resultado = await _validador.ValidarAsync(request, null);
+        var validador = _serviceProvider.GetRequiredService<IRegistrarUsuarioRequestValidador>();
+
+        var resultado = await validador.ValidarAsync(request, null);
 
         Assert.Contains(resultado, r => r.Campo == "DataNascimento");
     }
@@ -134,7 +192,9 @@ public class RegistrarUsuarioRequestValidadorTests
 
         var userInfo = new UserInfo { EhAdministrador = false };
 
-        var resultado = await _validador.ValidarAsync(request, userInfo);
+        var validador = _serviceProvider.GetRequiredService<IRegistrarUsuarioRequestValidador>();
+
+        var resultado = await validador.ValidarAsync(request, userInfo);
 
         Assert.Contains(resultado, r => r.Campo == "EhAdministrador");
     }

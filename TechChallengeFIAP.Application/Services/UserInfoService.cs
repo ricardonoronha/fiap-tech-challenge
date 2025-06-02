@@ -26,7 +26,7 @@ public class UserInfoService : IUserInfoService
             Id = Guid.TryParse(user.FindFirstValue(JwtRegisteredClaimNames.Sub), out var id) ? id : Guid.Empty,
             Email = user.FindFirstValue(JwtRegisteredClaimNames.Email) ?? string.Empty,
             Nome = user.FindFirstValue(ClaimTypes.Name) ?? string.Empty, // Só se você quiser usar futuramente
-            EhAdministrador = user.IsInRole("admin")
+            EhAdministrador = user.IsInRole("Administrador")
         };
     }
 }

@@ -88,7 +88,7 @@ public class AuthService : IAuthService
         ];
 
         if (ehAdministrador)
-            claims.Add(new(ClaimTypes.Role, "admin"));
+            claims.Add(new(ClaimTypes.Role, "Administrador"));
 
         var token = new JwtSecurityToken(
             issuer: _jwtSettings.Issuer,

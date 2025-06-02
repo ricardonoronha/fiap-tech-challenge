@@ -28,13 +28,7 @@ namespace TechChallengeFIAP.Application.Services
 
             return jogos.Select(j =>
             {
-                var promocaoAtiva = j.Promocoes
-                    .FirstOrDefault(p => !p.EhCancelada && p.DataInicio <= agora && p.DataFim >= agora);
-
-                var ehPromocional = promocaoAtiva != null;
-                var valorFinal = ehPromocional
-                    ? j.ValorBase * (1 - (promocaoAtiva.PercentualDesconto / 100))
-                    : j.ValorBase;
+                var (valorFinal, ehPromocional) = j.ObterValorFinal();
 
                 return new JogoResponseDto
                 {
@@ -70,15 +64,7 @@ namespace TechChallengeFIAP.Application.Services
             if (jogo == null)
                 return null;
 
-            var agora = DateTime.UtcNow;
-
-            var promocaoAtiva = jogo.Promocoes
-                .FirstOrDefault(p => !p.EhCancelada && p.DataInicio <= agora && p.DataFim >= agora);
-
-            var ehPromocional = promocaoAtiva != null;
-            var valorFinal = ehPromocional
-                ? jogo.ValorBase * (1 - (promocaoAtiva.PercentualDesconto / 100))
-                : jogo.ValorBase;
+            var (valorFinal, ehPromocional) = jogo.ObterValorFinal();
 
             return new JogoResponseDto
             {

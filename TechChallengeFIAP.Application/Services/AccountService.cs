@@ -20,9 +20,11 @@ public class AccountService(
         if (validacaoRequest.Any())
             return new FalhaAoRegistraUsuarioResponseDto(validacaoRequest);
 
+        var pessoaId = Guid.NewGuid();
+
         var pessoa = new Pessoa()
         {
-            Id = Guid.NewGuid(),
+            Id = pessoaId,
             NomeUsuario = request.NomeCompleto,
             NomeCompleto = request.NomeCompleto,
             EmailUsuario = request.Email,
@@ -37,9 +39,9 @@ public class AccountService(
 
         await UnitOfWork.SaveChangesAsync(cancellationToken);
 
-        return new UsuarioRegistradoResponseDto(pessoa.Id, pessoa.EhAdministrador);
+        return new UsuarioRegistradoResponseDto(pessoaId, pessoa.EhAdministrador);
     }
 
 
-    
+
 }

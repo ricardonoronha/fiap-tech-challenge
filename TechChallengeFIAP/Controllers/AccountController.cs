@@ -1,6 +1,7 @@
 using TechChallengeFIAP.Domain.DTOs.Account;
 using Microsoft.AspNetCore.Mvc;
 using TechChallengeFIAP.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TechChallengeFIAP.Controllers
 {
@@ -8,7 +9,6 @@ namespace TechChallengeFIAP.Controllers
     [ApiController]
     public class AccountController(IAccountService AccountService, IUserInfoService UserInfoService) : ControllerBase
     {
-
         [HttpPost("register")]
         [ProducesResponseType(typeof(UsuarioRegistradoResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FalhaAoRegistraUsuarioResponseDto), StatusCodes.Status400BadRequest)]
