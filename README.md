@@ -88,4 +88,4 @@ O vídeo demonstrando o funcionamento da aplicação pode ser acessado em: **[VI
 
 ## 📎 Documentação DDD
 
-- Mapeamento de fluxos via Event Storming disponível em: **[DDD - MIRO](https://miro.com/welcomeonboard/RFpRNkpwelI0VEM1b1BJOUpZV2FLTlJlWmFqZ2ZlWG1kVGpTZzhXK01wWWJoaWlVWjRUdUdXaXlvZ0RFbk01c2c2WHdicE9XNUR0L05qUDVhRnA4OGxnK25hOVZrcU5pWDV2b2dRL0RCbGFNdzRXTXdtZk9lZU83WFlTUm9nVzVQdGo1ZEV3bUdPQWRZUHQzSGl6V2NBPT0hdjE=?share_link_id=519463949675)**
+- Mapeamento de fluxos via Event Storming disponível em: **[DDD - MIRO](https://miro.com/app/board/uXjVIE9R-Pg=/?share_link_id=308339772603)**
