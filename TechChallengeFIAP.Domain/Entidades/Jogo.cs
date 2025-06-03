@@ -8,7 +8,6 @@ public class Jogo
     public string ClassificacaoJogo { get; set; } = "L";
     public DateTime DataLancamento { get; set; }
     public decimal ValorBase { get; set; }
-    public decimal ValorPromocao { get; set; }
     public bool EhInativo { get; set; }
 
     public ICollection<Promocao> Promocoes { get; set; } = [];

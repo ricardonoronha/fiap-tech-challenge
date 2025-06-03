@@ -12,7 +12,7 @@ namespace TechChallengeFIAP.Domain.Entidades
         public DateTime DataInicio { get; set; }
         public DateTime DataFim { get; set; }
         public Guid JogoId { get; set; }
-        public Jogo Jogo { get; set; }
+        public Jogo Jogo { get; set; } = null!;
         public bool EhCancelada { get; set; }
         public decimal PercentualDesconto { get; set; }
     }
