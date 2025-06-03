@@ -43,10 +43,13 @@ O projeto inclui testes automatizados com foco em qualidade e comportamento real
    ```bash
    # String de conexão com o banco de dados SQL Server
    ConnectionStrings__DefaultConnection="Server=localhost;Database={DB_NAME};User Id={DB_USER};Password='{DB_PASSWORD}';TrustServerCertificate=true;"
-
+   
    # Configurações do JWT
    JwtSettings__Secret="{JWT_SECRET_KEY}"
    JwtSettings__Issuer="{JWT_ISSUER}"
+   JwtSettings__Audience="{JWT_AUDIENCE}"
+   JwtSettings__TokenExpirationInMinutes=60
+   JwtSettings__TokenTimeToleranceInMinutes=1
    ```
 2. Aplique as migrations:
    ```bash
@@ -58,7 +61,7 @@ O projeto inclui testes automatizados com foco em qualidade e comportamento real
    ```
 4. Acesse o Swagger em:
    ```
-   https://localhost:{porta}/swagger
+   http://localhost:5136/swagger/index.html
    ```
 
 ## 📂 Estrutura do Projeto
@@ -81,8 +84,8 @@ O projeto inclui testes automatizados com foco em qualidade e comportamento real
 
 ## 🎥 Demonstração
 
-O vídeo demonstrando o funcionamento da aplicação pode ser acessado em: [link_do_video]
+O vídeo demonstrando o funcionamento da aplicação pode ser acessado em: **[VIDEO - YOUTUBE](https://youtu.be/a1n6iSAu_o0)**
 
 ## 📎 Documentação DDD
 
-- Mapeamento de fluxos via Event Storming disponível em: [link_do_miro]
+- Mapeamento de fluxos via Event Storming disponível em: **[DDD - MIRO](https://miro.com/welcomeonboard/RFpRNkpwelI0VEM1b1BJOUpZV2FLTlJlWmFqZ2ZlWG1kVGpTZzhXK01wWWJoaWlVWjRUdUdXaXlvZ0RFbk01c2c2WHdicE9XNUR0L05qUDVhRnA4OGxnK25hOVZrcU5pWDV2b2dRL0RCbGFNdzRXTXdtZk9lZU83WFlTUm9nVzVQdGo1ZEV3bUdPQWRZUHQzSGl6V2NBPT0hdjE=?share_link_id=519463949675)**
