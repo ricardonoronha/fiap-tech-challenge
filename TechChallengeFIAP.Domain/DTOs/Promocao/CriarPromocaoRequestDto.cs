@@ -4,9 +4,6 @@ namespace TechChallengeFIAP.Domain.DTOs.Promocao
 {
     public class CriarPromocaoRequestDto
     {
-        [Required(ErrorMessage = "JogoId é obrigatório.")]
-        public Guid JogoId { get; set; }
-
         [Required(ErrorMessage = "Data de início é obrigatória.")]
         [DataType(DataType.Date)]
         public DateTime DataInicio { get; set; }
