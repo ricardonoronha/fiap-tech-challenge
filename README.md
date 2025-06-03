@@ -40,6 +40,14 @@ O projeto inclui testes automatizados com foco em qualidade e comportamento real
 ## 🚀 Como Executar
 
 1. Configure o arquivo `.env` com os dados do banco e chave JWT
+   ```bash
+   # String de conexão com o banco de dados SQL Server
+   ConnectionStrings__DefaultConnection="Server=localhost;Database={DB_NAME};User Id={DB_USER};Password='{DB_PASSWORD}';TrustServerCertificate=true;"
+
+   # Configurações do JWT
+   JwtSettings__Secret="{JWT_SECRET_KEY}"
+   JwtSettings__Issuer="{JWT_ISSUER}"
+   ```
 2. Aplique as migrations:
    ```bash
    dotnet ef database update
@@ -64,12 +72,11 @@ O projeto inclui testes automatizados com foco em qualidade e comportamento real
 
 ## 👨‍💻 Discord dos Autores
 
-- Armando José Vieira Dias de Oliveira
-- Marlon dos Santos Limeira (@Marlon Santos RM361866)
-- Matheus de Moraes Rodrigues
-- Matheus Nascimento Costa
-- Ricardo Noronha de Menezes (@ricardo_nm RM363183)
-
+- Armando José Vieira Dias de Oliveira (id: @armandojoseoliveira - User: Nando) - RM361112
+- Marlon dos Santos Limeira (id: @marlonsantos4509 - User: Marlon Santos RM361866) - RM361866
+- Matheus de Moraes Rodrigues (id: @.marmotinhas - User: MatheusMR) - RM362205
+- Matheus Nascimento Costa (id: @matheus_coast - User: Matheus_coast) - RM363404
+- Ricardo Noronha de Menezes (id: @ricardo_nm - User: ricardo_nm) - RM363183
 
 
 ## 🎥 Demonstração
