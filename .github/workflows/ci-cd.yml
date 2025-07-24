@@ -1,0 +1,65 @@
+name: CI/CD - Build, Testes e Deploy
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    if: github.ref != 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'  
+
+      - name: Restore dependências
+        run: dotnet restore
+
+      - name: Build do projeto
+        run: dotnet build --no-restore
+
+      - name: Executar testes
+        run: dotnet test --no-build --verbosity normal
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/principal' && github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publicar aplicação
+        run: dotnet publish -c Release -o ./publish
+
+         deploy:
+    needs: build-and-test
+    runs-on: windows-latest
+    if: github.ref == 'refs/heads/principal' && github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publicar aplicação
+        run: dotnet publish -c Release -o ./publish
+
+      # Aqui você pode colocar comandos para deploy real (Azure, Docker, etc.)
+      # Por exemplo, subir os arquivos com FTP, SCP, Azure CLI etc.
+
