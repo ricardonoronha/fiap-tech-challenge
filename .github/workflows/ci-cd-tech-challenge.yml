@@ -1,4 +1,4 @@
-name: CI/CD - Build, Testes e Deploy
+name: CI/CD - FIAP_TECH_CHALLENGE
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'  
+          dotnet-version: '8.0.x'
 
       - name: Restore dependências
         run: dotnet restore
@@ -31,7 +31,7 @@ jobs:
   deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/principal' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v3
@@ -43,23 +43,10 @@ jobs:
 
       - name: Publicar aplicação
         run: dotnet publish -c Release -o ./publish
-
-         deploy:
-    needs: build-and-test
-    runs-on: windows-latest
-    if: github.ref == 'refs/heads/principal' && github.event_name == 'push'
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        
+      - name: Deploy para Azure Web App
+        uses: azure/webapps-deploy@v2
         with:
-          dotnet-version: '8.0.x'
-
-      - name: Publicar aplicação
-        run: dotnet publish -c Release -o ./publish
-
-      # Aqui você pode colocar comandos para deploy real (Azure, Docker, etc.)
-      # Por exemplo, subir os arquivos com FTP, SCP, Azure CLI etc.
-
+          app-name: 'fcg65'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./publish
