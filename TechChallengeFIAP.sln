@@ -22,6 +22,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechChallengeFIAP.Tests.Uni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechChallengeFIAP.Tests.Integration", "tests\TechChallengeFIAP.Tests.Integration\TechChallengeFIAP.Tests.Integration.csproj", "{0D4CB08C-71F2-4547-A59B-820EF50C6746}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{AC09FFA1-32F8-4F1E-8DA5-60BF8410395E}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\ci-cd-tech-challenge.yml = .github\workflows\ci-cd-tech-challenge.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,11 +63,13 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {EBDD934E-A2A1-45CE-B0BF-DDE664E8F76D}
-	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9F5A06DD-37EE-465C-B2D3-541B0ADDF0BF} = {C8EC33E1-EC28-4A86-86B0-BF8D02CCC1E6}
 		{0D4CB08C-71F2-4547-A59B-820EF50C6746} = {C8EC33E1-EC28-4A86-86B0-BF8D02CCC1E6}
+		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {C83346A9-AFCF-4C8E-B1B9-AB0EDA8286F4}
+		{AC09FFA1-32F8-4F1E-8DA5-60BF8410395E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EBDD934E-A2A1-45CE-B0BF-DDE664E8F76D}
 	EndGlobalSection
 EndGlobal
