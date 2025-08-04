@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Datadog.Trace;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog.Context;
 using TechChallengeFIAP.Data.Repositorios;
 using TechChallengeFIAP.Domain.DTOs.Jogo;
 using TechChallengeFIAP.Domain.DTOs.Promocao;
@@ -22,11 +24,26 @@ namespace TechChallengeFIAP.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("testlog")]
-        public IActionResult TestLog()
+        [HttpGet("testlog/{level}")]
+        public IActionResult TestLog(int level)
         {
-            _logger.LogInformation("Teste Log | DateTimeTicks: {DateTimeTicks}, Year: {Year}",  DateTime.Now.Ticks, DateTime.Now.Year);
-            return Ok();
+
+            if (level == 1)
+            {
+                _logger.LogInformation("Teste Log | DateTimeTicks: {DateTimeTicks}, Year: {Year}", DateTime.Now.Ticks, DateTime.Now.Year);
+                return Ok();
+            }
+            else if (level == 2)
+            {
+                _logger.LogWarning("Teste Log | DateTimeTicks: {DateTimeTicks}, Year: {Year}", DateTime.Now.Ticks, DateTime.Now.Year);
+                return Ok();
+            }
+            else if (level == 3) {
+                _logger.LogError("Teste Log | DateTimeTicks: {DateTimeTicks}, Year: {Year}", DateTime.Now.Ticks, DateTime.Now.Year);
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
         [HttpGet]
