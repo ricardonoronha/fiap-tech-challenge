@@ -41,12 +41,36 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Publicar aplicação
-        run: dotnet publish -c Release -o ./publish
-        
-      - name: Deploy para Azure Web App
-        uses: azure/webapps-deploy@v2
+      - name: Login AWS
+        uses: aws-actions/configure-aws-credentials@v3
         with:
-          app-name: 'fcg65'
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ./publish
+          aws-region: sa-east-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Build and push image to ECR
+        env:
+          ECR_REGISTRY: 670769476174.dkr.ecr.sa-east-1.amazonaws.com
+          ECR_REPOSITORY: fcg65
+          IMAGE_TAG: ${{ github.run_number }}
+        run: |
+          # Login no ECR
+          aws ecr get-login-password --region sa-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
+
+          # Build da imagem
+          docker build -t $ECR_REPOSITORY:latest -t $ECR_REPOSITORY:$IMAGE_TAG .
+
+          # Tag completa com repositório
+          docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+          # Push das duas versões
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      
+      - name: New ECS Deployment
+        run: |
+          aws ecs update-service \
+            --cluster fcg65 \
+            --service fcg65-service \
+            --force-new-deployment
