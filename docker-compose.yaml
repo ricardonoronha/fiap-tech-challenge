@@ -23,12 +23,12 @@ services:
       - DD_ENV=prod
       - DD_SERVICE=fcg65
       - DD_VERSION=v1.0.0
-      - JwtSettings__Audience="FiapCloudGamesApi"
-      - JwtSettings__Issuer="FiapCloudGames65"
-      - JwtSettings__Secret="Yb@7T0m_3Z#jL+eK2w9B9p&gNdT3Ft2D"
+      - JwtSettings__Audience="{Secret}"
+      - JwtSettings__Issuer="{Secret}"
+      - JwtSettings__Secret="{Secret}"
       - JwtSettings__TokenExpirationInMinutes=60
       - JwtSettings__TokenTimeToleranceInMinutes=1
-      - ConnectionStrings__DefaultConnection=Server=tcp:fcg65-brs.database.windows.net,1433;Initial Catalog=fcg65db;Persist Security Info=False;User ID=sqladmin;Password=FcgBrs@2025Dev!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+      - ConnectionStrings__DefaultConnection={Secret}
       - ASPNETCORE_ENVIRONMENT=Production 
       - DD_AGENT_HOST=datadog
       
@@ -43,7 +43,7 @@ services:
     environment:
       - DD_HOSTNAME=fcg65-agent
       - DD_SITE=us3.datadoghq.com
-      - DD_API_KEY=7b674ab291fbcaa5120a07c1961dc7df
+      - DD_API_KEY={Secret}
       - DD_APM_ENABLED=true
       - DD_LOGS_ENABLED=true
       - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
