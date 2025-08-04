@@ -1,17 +1,53 @@
 version: '3.8'
 
 services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=teste@123
+  api:
+    container_name: fcg-api
+    image: fcg65:v1.0.6 # Imagem com versão fixa
     ports:
-      - "1433:1433"
-    volumes:
-      - sqlserver_data:/var/opt/mssql
-    restart: unless-stopped
+      - "8080:8080"
+      - "8081:8081"
+    labels:
+      - "com.datadoghq.tags.env=prod"
+      - "com.datadoghq.tags.service=fcg65"
+      - "com.datadoghq.tags.version=v1.0.6"
+    environment:
+      - CORECLR_ENABLE_PROFILING=1
+      - CORECLR_PROFILER={846F5F1C-F9AE-4B07-969E-05C26BC060D8}
+      - CORECLR_PROFILER_PATH=/opt/datadog/Datadog.Trace.ClrProfiler.Native.so
+      - DD_DOTNET_TRACER_HOME=/opt/datadog
+      - DD_INTEGRATIONS=/opt/datadog/integrations.json
+      - LD_PRELOAD=/opt/datadog/continuousprofiler/Datadog.Linux.ApiWrapper.x64.so
+      - DD_LOGS_INJECTION=true
+      - DD_PROFILING_ENABLED=true
+      - DD_ENV=prod
+      - DD_SERVICE=fcg65
+      - DD_VERSION=v1.0.0
+      - JwtSettings__Audience="FiapCloudGamesApi"
+      - JwtSettings__Issuer="FiapCloudGames65"
+      - JwtSettings__Secret="Yb@7T0m_3Z#jL+eK2w9B9p&gNdT3Ft2D"
+      - JwtSettings__TokenExpirationInMinutes=60
+      - JwtSettings__TokenTimeToleranceInMinutes=1
+      - ConnectionStrings__DefaultConnection=Server=tcp:fcg65-brs.database.windows.net,1433;Initial Catalog=fcg65db;Persist Security Info=False;User ID=sqladmin;Password=FcgBrs@2025Dev!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+      - ASPNETCORE_ENVIRONMENT=Production 
+      - DD_AGENT_HOST=datadog
+      
+    depends_on:
+      - datadog
 
-volumes:
-  sqlserver_data:
+  datadog:
+    container_name: datadog
+    image: gcr.io/datadoghq/agent:latest
+    ports:
+      - "127.0.0.1:8126:8126/tcp"
+    environment:
+      - DD_HOSTNAME=fcg65-agent
+      - DD_SITE=us3.datadoghq.com
+      - DD_API_KEY=7b674ab291fbcaa5120a07c1961dc7df
+      - DD_APM_ENABLED=true
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      - DD_PROCESS_AGENT_ENABLED=true
+      - DD_CONTAINER_EXCLUDE_LOGS="name:datadog-agent"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro

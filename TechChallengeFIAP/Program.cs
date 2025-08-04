@@ -4,12 +4,19 @@ using DotNetEnv;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using TechChallengeFIAP.Domain.Validacao;
-using TechChallengeFIAP.Application.Services;
 using Microsoft.OpenApi.Models;
+using Datadog.Trace;
+using Datadog.Trace.Configuration;
+
 
 Env.Load();
 
+var settings = TracerSettings.FromDefaultSources();
+Tracer.Configure(settings);
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Configuração inicial do Serilog
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
@@ -55,13 +62,13 @@ builder
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || true)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 

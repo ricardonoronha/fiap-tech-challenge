@@ -13,10 +13,20 @@ namespace TechChallengeFIAP.Controllers
     public class JogosController : ControllerBase
     {
         private readonly IJogosService _jogosService;
+        private readonly ILogger<JogosController> _logger;
 
-        public JogosController(IJogosService jogosService)
+        public JogosController(IJogosService jogosService, ILogger<JogosController> logger)
         {
             _jogosService = jogosService;
+            _logger = logger;
+        }
+
+        [AllowAnonymous]
+        [HttpGet("testlog")]
+        public IActionResult TestLog()
+        {
+            _logger.LogInformation("Teste Log | DateTimeTicks: {DateTimeTicks}, Year: {Year}",  DateTime.Now.Ticks, DateTime.Now.Year);
+            return Ok();
         }
 
         [HttpGet]
@@ -24,6 +34,8 @@ namespace TechChallengeFIAP.Controllers
         {
             try
             {
+                _logger.LogInformation("Gettings jogos");
+
                 var jogos = await _jogosService.GetJogosAsync();
                 return Ok(jogos);
             }
