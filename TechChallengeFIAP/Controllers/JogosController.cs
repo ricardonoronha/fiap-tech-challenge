@@ -24,7 +24,7 @@ namespace TechChallengeFIAP.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("testlog/{level}")]
+        [HttpGet("diagnostico/{level}")]
         public IActionResult TestLog(int level)
         {
 
