@@ -1,15 +1,40 @@
-using TechChallengeFIAP.Application.Extensions;
-using TechChallengeFIAP.Middlewares;
+using Datadog.Trace;
+using Datadog.Trace.Configuration;
 using DotNetEnv;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using TechChallengeFIAP.Domain.Validacao;
-using TechChallengeFIAP.Application.Services;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Events;
+using TechChallengeFIAP.Application.Extensions;
+using TechChallengeFIAP.Domain.Validacao;
+using TechChallengeFIAP.Middlewares;
+
 
 Env.Load();
 
+var settings = TracerSettings.FromDefaultSources();
+Tracer.Configure(settings);
+
+var defaultLogger = new LoggerConfiguration()
+   .MinimumLevel.Information()
+   .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+   .Enrich.FromLogContext()
+   .Enrich.WithEnvironmentName()
+   .Enrich.WithMachineName()
+   .Enrich.WithProcessId()
+   .Enrich.WithThreadId()
+   .WriteTo.Console(new Serilog.Formatting.Json.JsonFormatter(renderMessage: true))
+   .CreateLogger();
+
+Log.Logger = defaultLogger;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Usa o Serilog
+builder.Host.UseSerilog();
+
+// Configuração inicial do Serilog
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
@@ -54,14 +79,12 @@ builder
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+// Não vamos redirecionar para HTTPS porque quem cuidará 
+// do HTTPS no futuro será o ALB
+// app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 

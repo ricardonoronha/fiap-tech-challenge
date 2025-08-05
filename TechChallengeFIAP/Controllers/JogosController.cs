@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Datadog.Trace;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog.Context;
 using TechChallengeFIAP.Data.Repositorios;
 using TechChallengeFIAP.Domain.DTOs.Jogo;
 using TechChallengeFIAP.Domain.DTOs.Promocao;
@@ -13,10 +15,35 @@ namespace TechChallengeFIAP.Controllers
     public class JogosController : ControllerBase
     {
         private readonly IJogosService _jogosService;
+        private readonly ILogger<JogosController> _logger;
 
-        public JogosController(IJogosService jogosService)
+        public JogosController(IJogosService jogosService, ILogger<JogosController> logger)
         {
             _jogosService = jogosService;
+            _logger = logger;
+        }
+
+        [AllowAnonymous]
+        [HttpGet("testlog/{level}")]
+        public IActionResult TestLog(int level)
+        {
+
+            if (level == 1)
+            {
+                _logger.LogInformation("Teste Log | DateTimeTicks: {DateTimeTicks}, Year: {Year}", DateTime.Now.Ticks, DateTime.Now.Year);
+                return Ok();
+            }
+            else if (level == 2)
+            {
+                _logger.LogWarning("Teste Log | DateTimeTicks: {DateTimeTicks}, Year: {Year}", DateTime.Now.Ticks, DateTime.Now.Year);
+                return Ok();
+            }
+            else if (level == 3) {
+                _logger.LogError("Teste Log | DateTimeTicks: {DateTimeTicks}, Year: {Year}", DateTime.Now.Ticks, DateTime.Now.Year);
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
         [HttpGet]
@@ -24,6 +51,8 @@ namespace TechChallengeFIAP.Controllers
         {
             try
             {
+                _logger.LogInformation("Gettings jogos");
+
                 var jogos = await _jogosService.GetJogosAsync();
                 return Ok(jogos);
             }
