@@ -36,4 +36,4 @@ Continuando com o projeto, a FIAP decidiu avançar no projeto adicionando agora 
 
 ## 🎥 Demonstração
 
-O vídeo demonstrando requisitos da Fase 2: **[VIDEO - YOUTUBE](TBD)**
+O vídeo demonstrando requisitos da Fase 2: **[VIDEO - YOUTUBE](https://youtu.be/aGtNf--PLIg)**
